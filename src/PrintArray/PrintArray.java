@@ -7,23 +7,22 @@ public class PrintArray {
         int values[] = { 12, 11, 13, 5, 6, 7 };
         int n = values.length;
 
-        System.out.println(Arrays.toString(values));
+        System.out.printf("%s%n%n", Arrays.toString(values));
 
         printInSteps(values, n);
     }
 
     private static void printInSteps(int[] values, int n) {
         for (int i = 0; i < n; i++) {
-            print(values, i + 1);
+            printWithLength(values, i + 1);
         }
     }
 
-    static void print(int[] values, int n) {
+    static void printWithLength(int[] values, int n) {
         if (values == null || values.length == 0 || n <= 0)
             return;
 
-        String subArray = Arrays.toString(Arrays.copyOfRange(values, 0, n));
-
-        System.out.printf("[...](%d) => %s%n", n, subArray);
+        int [] subArray = Arrays.copyOfRange(values, 0, n);
+        System.out.printf("%s(n=%d)%n", Arrays.toString(subArray), n);
     }
 }
