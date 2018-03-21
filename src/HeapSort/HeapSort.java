@@ -4,50 +4,47 @@ import java.util.Arrays;
 
 public class HeapSort {
     public static void main(String[] args) {
-        Integer[] values = { 12, 11, 13, 5, 6, 7 };
-        int n = values.length;
+        final Integer[] values = { 12, 11, 13, 5, 6, 7 };
+        printArray("Original: ", values);
 
-        printArray(values);
-
-        buildHeap(values, n);
-
-        printArray(values);
-
-        sort(values, n);
-
-        printArray(values);
+        buildHeap(values);
+        sort(values);
     }
 
-    private static void buildHeap(Integer[] values, int n) {
-        for (int i = n / 2 - 1; i >= 0; i--) {
-            heapify(values, n, i);
+    private static void buildHeap(Integer[] values) {
+        final int heapSize = values.length;
+        for (int i = heapSize / 2 - 1; i >= 0; i--) {
+            heapify(values, i, heapSize);
         }
+        printArray("Heap: ", values);
     }
 
-    private static void sort(Integer[] values, int n) {
-        for (int i = n - 1; i >= 0; i--) {
-            swap(values, i, 0);
-            heapify(values, i, 0);
+    private static void sort(Integer[] values) {
+        final int n = values.length;
+        for (int heapSize = n - 1; heapSize >= 0; heapSize--) {
+            swap(values, 0, heapSize);
+            heapify(values, 0, heapSize);
         }
+        printArray("Sorted: ", values);
     }
 
-    private static void heapify(Integer[] values, int n, int i) {
+    private static void heapify(Integer[] values, int i, int heapSize) {
         int largest = i;
         int left = i * 2 + 1;
         int right = i * 2 + 2;
 
-        if (left < n && values[left] > values[largest])
+        if (left < heapSize && values[left] > values[largest])
             largest = left;
 
-        if (right < n && values[right] > values[largest])
+        if (right < heapSize && values[right] > values[largest])
             largest = right;
 
         if (largest != i) {
             swap(values, i, largest);
-            heapify(values, n, largest);
+            heapify(values, heapSize, largest);
         }
 
-        printWithIndexAndLength(values, n, i);
+        printWithIndexAndLength(values, heapSize, i);
     }
 
     public static final <T> void swap(T[] array, int i, int j) {
@@ -56,8 +53,8 @@ public class HeapSort {
         array[j] = t;
     }
 
-    private static void printArray(Integer[] values) {
-        System.out.printf("%s%n", Arrays.toString(values));
+    private static void printArray(String message, Integer[] values) {
+        System.out.printf("%s%s%n", message, Arrays.toString(values));
     }
 
     static void printWithLength(Integer[] values, int n) {
