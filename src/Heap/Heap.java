@@ -19,6 +19,9 @@
  *  % java Heap < words3.txt
  *  all bad bed bug dad ... yes yet zoo   [ one string per line ]
  *
+ * (*) GC$ changes to standard library for simplicity and compliance with new Java Standards.
+ * Example for PowerShell
+ *   PS> "foo bar foo again number one" | java Heap.Heap
  ******************************************************************************/
 
 /**
@@ -32,7 +35,7 @@
  *  @author Kevin Wayne
  */
 
-package Heap;
+package Heap; // GC$
 
 import java.util.Arrays;
 import java.util.Scanner;
@@ -47,10 +50,11 @@ public class Heap {
      * Rearranges the array in ascending order, using the natural order.
      * @param pq the array to be sorted
      */
-    public static <T> void sort(Comparable<T>[] pq) {
+    public static <T extends Comparable<T>> void sort(T[] pq) {
         int n = pq.length;
         for (int k = n / 2; k >= 1; k--)
             sink(pq, k, n);
+
         while (n > 1) {
             exch(pq, 1, n--);
             sink(pq, 1, n);
@@ -61,7 +65,7 @@ public class Heap {
     * Helper functions to restore the heap invariant.
     ***************************************************************************/
 
-    private static <T> void sink(Comparable<T>[] pq, int k, int n) {
+    private static <T extends Comparable<T>> void sink(T[] pq, int k, int n) {
         while (2 * k <= n) {
             int j = 2 * k;
 
@@ -78,9 +82,8 @@ public class Heap {
     * Helper functions for comparisons and swaps.
     * Indices are "off-by-one" to support 1-based indexing.
     ***************************************************************************/
-    private static <T> boolean less(Comparable<T>[] pq, int i, int j) {
-        T o = (T) pq[j - 1]; // TODO: fix this warning !
-        return pq[i - 1].compareTo(o) < 0;
+    private static <T extends Comparable<T>> boolean less(T[] pq, int i, int j) {
+        return pq[i - 1].compareTo(pq[j - 1]) < 0;
     }
 
     private static void exch(Object[] pq, int i, int j) {
@@ -90,7 +93,7 @@ public class Heap {
     }
 
     // print array to standard output
-    private static <T> void show(Comparable<T>[] a) {
+    private static <T extends Comparable<T>> void show(T[] a) {
         System.out.println(Arrays.toString(a));
     }
 
@@ -102,10 +105,9 @@ public class Heap {
      */
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
-
         try {
             String nextLine = input.nextLine();
-            String[] a = nextLine.split("\\s+|\\s*[\\,|\\;]\\s*");
+            String[] a = nextLine.split("\\s+|\\s*[\\,|\\;]\\s*"); // GC$
             show(a);
 
             Heap.sort(a);
