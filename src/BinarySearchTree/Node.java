@@ -14,7 +14,7 @@ public class Node<T extends Comparable<T>> {
     public boolean le(T data) {
         return Data.compareTo(data) <= 0;
     }
-    public boolean gt(T data) {
-        return Data.compareTo(data) > 0;
+    public boolean ge(T data) {
+        return Data.compareTo(data) >= 0;
     }
 }
