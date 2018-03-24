@@ -1,6 +1,8 @@
 package BinarySearchTree;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class BinarySearchTree {
     public static void main(String[] args) {
@@ -11,20 +13,27 @@ public class BinarySearchTree {
     private static <T extends Comparable<T>> void executeCase(final T[] initialValues, final T[] deletionValues) {
         Node<T> root = null;
 
+        // Add
         printArray("Add: ", initialValues);
         root = addToTree(root, initialValues);
         printTreeInOrder(root);
 
+        // Remove
         printArray("Remove: ", deletionValues);
         root = removeFromTree(root, deletionValues);
         printTreeInOrder(root);
 
-        T data = initialValues[0];
-        Node<T> node = search(root, data);
-        if (node != null) {
-            System.out.printf("Found [%s]%n", node.Data);
-        } else {
-            System.out.printf("Not found [%s]%n", data);
+        // Search
+        List<T> searchList = new ArrayList<>();
+        searchList.add(initialValues[0]);
+        searchList.add(deletionValues[0]);
+        for (T value : searchList) {
+            Node<T> node = search(root, value);
+            if (node != null) {
+                System.out.printf("Found [%s]%n", node.Data);
+            } else {
+                System.out.printf("Not found [%s]%n", value);
+            }
         }
     }
 
@@ -32,7 +41,6 @@ public class BinarySearchTree {
         for (T value : values) {
             root = Insert(root, value);
         }
-
         return root;
     }
 
@@ -47,7 +55,6 @@ public class BinarySearchTree {
         if (root.gt(data)) {
             return search(root.Left, data);
         }
-
         return search(root.Right, data);
     }
 
