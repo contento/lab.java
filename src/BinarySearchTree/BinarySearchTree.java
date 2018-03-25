@@ -18,12 +18,12 @@ public class BinarySearchTree {
         // Add
         printArray("(+) Add: ", initialValues);
         root = addToTree(root, initialValues);
-        printTreeInOrder(root);
+        printList(" (T) Tree: ", toInOrderList(new ArrayList<>(), root));
 
         // Remove
         printArray("(-) Delete: ", deletionValues);
         root = deleteFromTree(root, deletionValues);
-        printTreeInOrder(root);
+        printList(" (T) Tree: ", toInOrderList(new ArrayList<>(), root));
 
         // Find Min
         Node<T> node = findMin(root);
@@ -47,7 +47,7 @@ public class BinarySearchTree {
         }
 
         if (initialValues[0].getClass() == Integer.class) {
-            // not ready yet for other types
+            // TODO: not ready yet for other types
             System.out.printf("(*) BST: %s%n", isBinarySearchTree(root, minValue, maxValue));
         }
     }
@@ -136,16 +136,20 @@ public class BinarySearchTree {
         return root;
     }
 
-    private static <T extends Comparable<T>> void printTreeInOrder(Node<T> root) {
+    private static <T extends Comparable<T>> List<T> toInOrderList(List<T> list, Node<T> root) {
         if (root != null) {
-            printTreeInOrder(root.Left);
-            System.out.println(root.Data);
-            printTreeInOrder(root.Right);
+            toInOrderList(list, root.Left);
+            list.add(root.Data);
+            toInOrderList(list, root.Right);
         }
+        return list;
     }
 
     private static <T extends Comparable<T>> void printArray(String message, T[] values) {
         System.out.printf("%s%s%n", message, Arrays.toString(values));
     }
 
+    private static <T extends Comparable<T>> void printList(String message, List<T> values) {
+        System.out.printf("%s%s%n", message, values.toString());
+    }
 }
