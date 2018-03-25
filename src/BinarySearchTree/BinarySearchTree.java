@@ -14,37 +14,48 @@ public class BinarySearchTree {
         Node<T> root = null;
 
         // Add
-        printArray("Add: ", initialValues);
+        printArray("(+) Add: ", initialValues);
         root = addToTree(root, initialValues);
         printTreeInOrder(root);
 
         // Remove
-        printArray("Remove: ", deletionValues);
-        root = removeFromTree(root, deletionValues);
+        printArray("(-) Delete: ", deletionValues);
+        root = deleteFromTree(root, deletionValues);
         printTreeInOrder(root);
+
+        // Find Min
+        Node<T> node = findMin(root);
+        if (node != null) {
+            System.out.printf("(.) Min Value [%s]%n", node.Data);
+        } else {
+            System.out.println("(.) Min Value not found");
+        }
 
         // Search
         List<T> searchList = new ArrayList<>();
         searchList.add(initialValues[0]);
         searchList.add(deletionValues[0]);
         for (T value : searchList) {
-            Node<T> node = search(root, value);
+            node = search(root, value);
             if (node != null) {
-                System.out.printf("Found [%s]%n", node.Data);
+                System.out.printf("(.) Found [%s]%n", node.Data);
             } else {
-                System.out.printf("Not found [%s]%n", value);
+                System.out.printf("(.) Not found [%s]%n", value);
             }
         }
     }
 
     private static <T extends Comparable<T>> Node<T> addToTree(Node<T> root, T[] values) {
         for (T value : values) {
-            root = Insert(root, value);
+            root = insert(root, value);
         }
         return root;
     }
 
-    private static <T extends Comparable<T>> Node<T> removeFromTree(Node<T> root, T[] values) {
+    private static <T extends Comparable<T>> Node<T> deleteFromTree(Node<T> root, T[] values) {
+        for (T value : values) {
+            delete(root, value);
+        }
         return root;
     }
 
@@ -58,16 +69,55 @@ public class BinarySearchTree {
         return search(root.Right, data);
     }
 
-    private static <T extends Comparable<T>> Node<T> Insert(Node<T> root, T data) {
+    private static <T extends Comparable<T>> Node<T> findMin(Node<T> root) {
+        if (root == null) {
+            return root;
+        }
+
+        while (root.Left != null) {
+            root = root.Left;
+        }
+
+        return root;
+    }
+
+    private static <T extends Comparable<T>> Node<T> insert(Node<T> root, T data) {
         if (root == null) {
             root = new Node<T>(data);
         } else {
             if (root.ge(data)) {
-                root.Left = Insert(root.Left, data);
+                root.Left = insert(root.Left, data);
             } else {
-                root.Right = Insert(root.Right, data);
+                root.Right = insert(root.Right, data);
             }
         }
+        return root;
+    }
+
+    private static <T extends Comparable<T>> Node<T> delete(Node<T> root, T data) {
+        if (root == null) {
+            return root;
+        }
+
+        if (root.gt(data)) {
+            root.Left = delete(root.Left, data);
+        } else if (root.lt(data)) {
+            root.Right = delete(root.Right, data);
+        } else {
+            if (root.Left == null) {
+                // one node: the right one
+                root = root.Right;
+            } else if (root.Right == null) {
+                // one node: the left one
+                root = root.Left;
+            } else {
+                // two nodes: find the min and delete the corresponding
+                Node<T> minNode = findMin(root.Right);
+                root.Data = minNode.Data;
+                root.Right = delete(root.Right, minNode.Data);
+            }
+        }
+
         return root;
     }
 
