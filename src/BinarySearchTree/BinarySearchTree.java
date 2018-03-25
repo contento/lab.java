@@ -6,11 +6,13 @@ import java.util.List;
 
 public class BinarySearchTree {
     public static void main(String[] args) {
-        executeCase(new Integer[] { 12, 11, 13, 5, 6, 7 }, new Integer[] { 6, 7 });
-        executeCase(new String[] { "Foo", "Bar", "Foo", "Good" }, new String[] { "Bar" });
+        executeCase(new Integer[] { 12, 11, 13, 5, 6, 7 }, new Integer[] { 6, 7 }, new Integer(Integer.MIN_VALUE),
+                new Integer(Integer.MAX_VALUE));
+        executeCase(new String[] { "Foo", "Bar", "Foo", "Good" }, new String[] { "Bar" }, "", "");
     }
 
-    private static <T extends Comparable<T>> void executeCase(final T[] initialValues, final T[] deletionValues) {
+    private static <T extends Comparable<T>> void executeCase(final T[] initialValues, final T[] deletionValues,
+            T minValue, T maxValue) {
         Node<T> root = null;
 
         // Add
@@ -43,6 +45,19 @@ public class BinarySearchTree {
                 System.out.printf("(.) Not found [%s]%n", value);
             }
         }
+
+        if (initialValues[0].getClass() == Integer.class) {
+            // not ready yet for other types
+            System.out.printf("(*) BST: %s%n", isBinarySearchTree(root, minValue, maxValue));
+        }
+    }
+
+    private static <T extends Comparable<T>> boolean isBinarySearchTree(Node<T> root, T minValue, T maxValue) {
+        if (root == null)
+            return true;
+
+        return (root.ge(minValue) && root.lt(maxValue) && isBinarySearchTree(root.Left, minValue, root.Data)
+                && isBinarySearchTree(root.Right, root.Data, maxValue));
     }
 
     private static <T extends Comparable<T>> Node<T> addToTree(Node<T> root, T[] values) {
@@ -132,4 +147,5 @@ public class BinarySearchTree {
     private static <T extends Comparable<T>> void printArray(String message, T[] values) {
         System.out.printf("%s%s%n", message, Arrays.toString(values));
     }
+
 }
